@@ -137,5 +137,28 @@ describe('Adagrams', () => {
         expect(Adagrams.highestScoreFrom(words.reverse())).toEqual(second);
       });
     });
+
+    describe('isInEnglishDict', () => {
+      it('returns true if the submitted word was found in the JSON dictionary', () => {
+        const input = 'abaxile';
+
+        const isValid = Adagrams.isInEnglishDict(input);
+        expect(isValid).toBe(true);
+      });
+
+      it('returns false when word is not found in the JSON dicionary', () => {
+        const input = 'sskkkrrrtt';
+
+        const isValid = Adagrams.isInEnglishDict(input);
+        expect(isValid).toBe(false);
+      });
+
+      it('returns false when input is an empty string', () => {
+        const input = '';
+
+        const isValid = Adagrams.isInEnglishDict(input);
+        expect(isValid).toBe(false);
+      });
+    });
   });
 });

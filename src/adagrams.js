@@ -122,8 +122,11 @@ const Adagrams = {
   isInEnglishDict(input) {
     // input is a string
     // returns true or false
-
     // https://github.com/dwyl/english-words
+    let fs = require("fs");
+    let dictionary = fs.readFileSync('assets/words_dictionary.json');
+    let jsonContent = JSON.parse(dictionary);
+    return (jsonContent[input] ? true : false)
   },
   buildLetterPool() {
     const alphabetObject = {
@@ -192,7 +195,7 @@ const Adagrams = {
         Z: 10
       },
 };
-
+  // console.log(Adagrams.isInEnglishDict('kkkkrrr'))
   // console.log(Adagrams.usesAvailableLetters('woohhhhx', ['W', 'O', 'O', 'H', 'H']))
   // console.log(Adagrams.highestScoreFrom(['apples', 'qqw', 'zzw', 'applesauce', 'melon']))
 
