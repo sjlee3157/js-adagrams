@@ -23,10 +23,7 @@ const Adagrams = {
     // returns true or false
 
     // edge: input = ''
-
-    if (input.length > 10) {
-      return false;
-    }
+    if (input.length > lettersInHand.length) { return false }
 
     const objectifyTheHand = () => {
       let handObject = {};
@@ -38,22 +35,13 @@ const Adagrams = {
 
     let hand = objectifyTheHand();
     input = input.toUpperCase().split('');
-    //
-    // console.log(lettersInHand);
-    // console.log(hand);
-    // console.log(input);
 
     let failures = 0;
-
     input.forEach(char => {
-      // console.log(hand[char] == undefined);
-      if ( !hand[char] || hand[char] < 1) {
-        failures += 1;
-      }
+      if ( !hand[char] || hand[char] < 1) { failures += 1 }
       hand[char] -= 1;
     });
     return (failures == 0 ? true : false)
-    // return true
   },
   scoreWord(word) {
     // word is a string of characters
@@ -63,14 +51,11 @@ const Adagrams = {
 
     // Each letter has a point value
     let scoreChart = Adagrams.scoreChart;
-    scoringWord.forEach(char => {
-      totalPoints += scoreChart[char];
-    });
+    scoringWord.forEach(char => { totalPoints += scoreChart[char] });
 
     // If the length of the word is 7, 8, 9, or 10, then the word gets an additional 8 points
     let plusEightWordLengths = [7,8,9,10];
     totalPoints += (plusEightWordLengths.includes(scoringWord.length) ? 8 : 0)
-
     return totalPoints
   },
   highestScoreFrom(words) {
@@ -78,46 +63,34 @@ const Adagrams = {
     // return a single object with data of winning word and score
         // word: string of word
         // score: score of the word
-    // Helper function to format output:
-    const outputAWinner = wordData => {
-      let highestScoringWord = {}
-      highestScoringWord.word = wordData[0];
-      highestScoringWord.score = wordData[1];
-      return highestScoringWord;
-    }
-
-    // Map the words into an array of arrays: [[word, score, length], ... ]
-    const wordsData = words.map(word => [word, Adagrams.scoreWord(word), word.length]);
+    const wordsData = words.map(word => {
+      let wordObject = {}
+      wordObject.word = word;
+      wordObject.score = Adagrams.scoreWord(word);
+      return wordObject;
+    })
 
     // What is the highest score?
-    let scores = wordsData.map(word => word[1])
-    const highestScore = scores.reduce(function(a,b) {
-      return Math.max(a, b)
-    })
+    let scores = wordsData.map(elm => elm.score)
+    const highestScore = scores.reduce(function(a,b) { return Math.max(a, b)})
 
     // Is there >1 word with the highest score (a tie)? If not, return word.
-    let tiedHighestScorers = wordsData.filter(word => word[1] == highestScore);
-    if (tiedHighestScorers.length == 1) {
-      return outputAWinner(tiedHighestScorers[0]);
-    }
+    let tiedHighestScorers = wordsData.filter(elm => elm.score == highestScore);
+    if (tiedHighestScorers.length == 1) { return tiedHighestScorers[0] }
 
     // Is there a word with length 10? If so, get the first word with length 10.
-    let winningLengthTenWord = tiedHighestScorers.find(function(element) {
-      return element[2] == 10;
+    let winningLengthTenWord = tiedHighestScorers.find(function(elm) {
+      return elm.word.length == 10;
     });
-    if (winningLengthTenWord) {
-      return outputAWinner(winningLengthTenWord);
-    }
+    if (winningLengthTenWord) { return winningLengthTenWord }
 
     // What is the shortest word length? Get the first word with shortest word length.
-    let lengths = wordsData.map(word => word[2])
-    const shortestLength = lengths.reduce(function(a,b) {
-      return Math.min(a, b)
-    })
-    let winningShortestWord = tiedHighestScorers.find(function(element) {
-      return element[2] == shortestLength;
+    let lengths = wordsData.map(elm => elm.word.length)
+    const shortestLength = lengths.reduce(function(a,b) {return Math.min(a, b)})
+    let winningShortestWord = tiedHighestScorers.find(function(elm) {
+      return elm.word.length == shortestLength;
     });
-    return outputAWinner(winningShortestWord);
+    return winningShortestWord;
   },
   isInEnglishDict(input) {
     // input is a string
@@ -160,9 +133,7 @@ const Adagrams = {
     const letterPool = [];
     for (let [letter, frequency] of Object.entries(alphabetObject)) {
       let i = frequency;
-      for (i; i > 0; i -= 1) {
-        letterPool.push(letter);
-      }
+      for (i; i > 0; i -= 1) { letterPool.push(letter) }
     }
     return letterPool
   },

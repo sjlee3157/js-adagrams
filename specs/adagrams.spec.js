@@ -137,8 +137,8 @@ describe('Adagrams', () => {
         expect(Adagrams.highestScoreFrom(words.reverse())).toEqual(second);
       });
     });
-
-    describe('isInEnglishDict', () => {
+  });
+  describe('isInEnglishDict', () => {
       it('returns true if the submitted word was found in the JSON dictionary', () => {
         const input = 'abaxile';
 
@@ -160,5 +160,4 @@ describe('Adagrams', () => {
         expect(isValid).toBe(false);
       });
     });
-  });
 });
