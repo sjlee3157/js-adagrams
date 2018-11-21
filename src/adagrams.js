@@ -28,15 +28,15 @@ const Adagrams = {
       return false;
     }
 
-    const hashTheHand = () => {
-      let handHash = {};
+    const objectifyTheHand = () => {
+      let handObject = {};
       lettersInHand.forEach(letter => {
-        handHash[letter] ? handHash[letter] += 1 : handHash[letter] = 1;
+        handObject[letter] ? handObject[letter] += 1 : handObject[letter] = 1;
       });
-      return handHash;
+      return handObject;
     }
 
-    let hand = hashTheHand();
+    let hand = objectifyTheHand();
     input = input.toUpperCase().split('');
     //
     // console.log(lettersInHand);
@@ -75,11 +75,18 @@ const Adagrams = {
   },
   highestScoreFrom(words) {
     // words is an array of strings
-    // return a single hash with data of winning word and score
-        // word: ${string of word}
-        // score: ${score of the word}
-    let highestScoringWord = {}
+    // return a single object with data of winning word and score
+        // word: string of word
+        // score: score of the word
+    // Helper function to format output:
+    const outputAWinner = wordData => {
+      let highestScoringWord = {}
+      highestScoringWord.word = wordData[0];
+      highestScoringWord.score = wordData[1];
+      return highestScoringWord;
+    }
 
+    // Map the words into an array of arrays: [[word, score, length], ... ]
     const wordsData = words.map(word => [word, Adagrams.scoreWord(word), word.length]);
 
     // What is the highest score?
@@ -89,24 +96,17 @@ const Adagrams = {
     })
 
     // Is there >1 word with the highest score (a tie)? If not, return word.
-    let tiedScorers = wordsData.filter(word => word[1] == highestScore);
-    if (tiedScorers.length == 1) {
-      let winningWord = tiedScorers[0];
-      highestScoringWord.word = winningWord[0];
-      highestScoringWord.score = winningWord[1];
-      return highestScoringWord;
+    let tiedHighestScorers = wordsData.filter(word => word[1] == highestScore);
+    if (tiedHighestScorers.length == 1) {
+      return outputAWinner(tiedHighestScorers[0]);
     }
 
     // Is there a word with length 10? If so, get the first word with length 10.
-
-    let winningLengthTenWord = tiedScorers.find(function(element) {
+    let winningLengthTenWord = tiedHighestScorers.find(function(element) {
       return element[2] == 10;
     });
-
     if (winningLengthTenWord) {
-      highestScoringWord.word = winningLengthTenWord[0];
-      highestScoringWord.score = winningLengthTenWord[1];
-      return highestScoringWord;
+      return outputAWinner(winningLengthTenWord);
     }
 
     // What is the shortest word length? Get the first word with shortest word length.
@@ -114,15 +114,10 @@ const Adagrams = {
     const shortestLength = lengths.reduce(function(a,b) {
       return Math.min(a, b)
     })
-    let winningShortestWord = tiedScorers.find(function(element) {
+    let winningShortestWord = tiedHighestScorers.find(function(element) {
       return element[2] == shortestLength;
     });
-
-    if (winningShortestWord) {
-      highestScoringWord.word = winningShortestWord[0];
-      highestScoringWord.score = winningShortestWord[1];
-      return highestScoringWord;
-    }
+    return outputAWinner(winningShortestWord);
   },
   isInEnglishDict(input) {
     // input is a string
@@ -131,7 +126,7 @@ const Adagrams = {
     // https://github.com/dwyl/english-words
   },
   buildLetterPool() {
-    const alphabetHash = {
+    const alphabetObject = {
       A: 9,
       B: 2,
       C: 2,
@@ -160,8 +155,7 @@ const Adagrams = {
       Z: 1
     }
     const letterPool = [];
-    for (let [letter, frequency] of Object.entries(alphabetHash)) {
-      // while (frequency > 0) {
+    for (let [letter, frequency] of Object.entries(alphabetObject)) {
       let i = frequency;
       for (i; i > 0; i -= 1) {
         letterPool.push(letter);
