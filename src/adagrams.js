@@ -62,7 +62,7 @@ const Adagrams = {
     let totalPoints = 0;
 
     // Each letter has a point value
-    let scoreChart = this.scoreChart;
+    let scoreChart = Adagrams.scoreChart;
     scoringWord.forEach(char => {
       totalPoints += scoreChart[char];
     });
@@ -78,6 +78,51 @@ const Adagrams = {
     // return a single hash with data of winning word and score
         // word: ${string of word}
         // score: ${score of the word}
+    let highestScoringWord = {}
+
+    const wordsData = words.map(word => [word, Adagrams.scoreWord(word), word.length]);
+
+    // What is the highest score?
+    let scores = wordsData.map(word => word[1])
+    const highestScore = scores.reduce(function(a,b) {
+      return Math.max(a, b)
+    })
+
+    // Is there >1 word with the highest score (a tie)? If not, return word.
+    let tiedScorers = wordsData.filter(word => word[1] == highestScore);
+    if (tiedScorers.length == 1) {
+      let winningWord = tiedScorers[0];
+      highestScoringWord.word = winningWord[0];
+      highestScoringWord.score = winningWord[1];
+      return highestScoringWord;
+    }
+
+    // Is there a word with length 10? If so, get the first word with length 10.
+
+    let winningLengthTenWord = tiedScorers.find(function(element) {
+      return element[2] == 10;
+    });
+
+    if (winningLengthTenWord) {
+      highestScoringWord.word = winningLengthTenWord[0];
+      highestScoringWord.score = winningLengthTenWord[1];
+      return highestScoringWord;
+    }
+
+    // What is the shortest word length? Get the first word with shortest word length.
+    let lengths = wordsData.map(word => word[2])
+    const shortestLength = lengths.reduce(function(a,b) {
+      return Math.min(a, b)
+    })
+    let winningShortestWord = tiedScorers.find(function(element) {
+      return element[2] == shortestLength;
+    });
+
+    if (winningShortestWord) {
+      highestScoringWord.word = winningShortestWord[0];
+      highestScoringWord.score = winningShortestWord[1];
+      return highestScoringWord;
+    }
   },
   isInEnglishDict(input) {
     // input is a string
@@ -155,7 +200,7 @@ const Adagrams = {
 };
 
   // console.log(Adagrams.usesAvailableLetters('woohhhhx', ['W', 'O', 'O', 'H', 'H']))
-  // console.log(Adagrams.scoreWord())
+  // console.log(Adagrams.highestScoreFrom(['apples', 'qqw', 'zzw', 'applesauce', 'melon']))
 
 // Do not remove this line or your tests will break!
 export default Adagrams;
