@@ -58,7 +58,20 @@ const Adagrams = {
   scoreWord(word) {
     // word is a string of characters
     // return an integer (points)
+    let scoringWord = word.toUpperCase().split('');
+    let totalPoints = 0;
+
+    // Each letter has a point value
     let scoreChart = this.scoreChart;
+    scoringWord.forEach(char => {
+      totalPoints += scoreChart[char];
+    });
+
+    // If the length of the word is 7, 8, 9, or 10, then the word gets an additional 8 points
+    let plusEightWordLengths = [7,8,9,10];
+    totalPoints += (plusEightWordLengths.includes(scoringWord.length) ? 8 : 0)
+
+    return totalPoints
   },
   highestScoreFrom(words) {
     // words is an array of strings
@@ -142,6 +155,7 @@ const Adagrams = {
 };
 
   // console.log(Adagrams.usesAvailableLetters('woohhhhx', ['W', 'O', 'O', 'H', 'H']))
+  // console.log(Adagrams.scoreWord())
 
 // Do not remove this line or your tests will break!
 export default Adagrams;
