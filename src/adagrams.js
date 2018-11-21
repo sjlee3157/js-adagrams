@@ -21,6 +21,39 @@ const Adagrams = {
     // input is a string - an input word
     // lettersInHand is an array of drawn letters (10 strings)
     // returns true or false
+
+    // edge: input = ''
+
+    if (input.length > 10) {
+      return false;
+    }
+
+    const hashTheHand = () => {
+      let handHash = {};
+      lettersInHand.forEach(letter => {
+        handHash[letter] ? handHash[letter] += 1 : handHash[letter] = 1;
+      });
+      return handHash;
+    }
+
+    let hand = hashTheHand();
+    input = input.toUpperCase().split('');
+    //
+    // console.log(lettersInHand);
+    // console.log(hand);
+    // console.log(input);
+
+    let failures = 0;
+
+    input.forEach(char => {
+      // console.log(hand[char] == undefined);
+      if ( !hand[char] || hand[char] < 1) {
+        failures += 1;
+      }
+      hand[char] -= 1;
+    });
+    return (failures == 0 ? true : false)
+    // return true
   },
   scoreWord(word) {
     // word is a string of characters
@@ -108,7 +141,7 @@ const Adagrams = {
       },
 };
 
-console.log(Adagrams.drawLetters())
+  // console.log(Adagrams.usesAvailableLetters('woohhhhx', ['W', 'O', 'O', 'H', 'H']))
 
 // Do not remove this line or your tests will break!
-// export default Adagrams;
+export default Adagrams;
